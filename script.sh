@@ -1,7 +1,7 @@
 #!/bin/bash
 
 diretorios=("/publico" "/adm" "/ven" "/sec")
-grupos=("GRP_ADM" "GRE_VEN" "GRP_VEC")
+grupos=("GRP_ADM" "GRP_VEN" "GRP_VEC")
 usuarios=("carlos" "maria" "joao" "debora" "sebastiana" "roberto" "josefina" "amanda" "rogerio")
 
 for group in "${grupos[@]}"; do
@@ -22,8 +22,8 @@ for ((i=0; i<${#usuarios[@]}; i++)); do
   if (( i < 3 )); then
     group="GRP_ADM"
   elif (( i < 6 )); then
-    group="GRE_VEN"
-  else$
+    group="GRP_VEN"
+  else
     group="GRP_VEC"
   fi
 
@@ -31,21 +31,19 @@ for ((i=0; i<${#usuarios[@]}; i++)); do
     echo "Usuário '$user' já existe."
   else
     echo "Criando usuário: $user"
-    useradd "$user" -m -s /bin/bash -g "$group" -p "$(openssl passwd -6 Senha123)"
+    useradd "$user" -m -s /bin/bash -g "$group" -p "$(openssh passwd -6 Senha123)"
     echo "Usuário '$user' criado e adicionado ao grupo '$group'."
   fi
 done
 
 echo "Processo de criação de usuários concluído!"
 
-diretorios=("/publico" "/private" "/shared")
-
 for dir in "${diretorios[@]}"; do
   if [ ! -d "$dir" ]; then
     echo "Criando diretório: $dir"
     sudo mkdir "$dir"
     
-    if [ "$dir" == "/publico" ]; then
+    if [ "$dir" = "/publico" ]; then
       chmod 777 "$dir"
       echo "Permissões 777 configuradas para o diretório $dir."
     else
@@ -60,3 +58,11 @@ for dir in "${diretorios[@]}"; do
 done
 
 echo "Processo de criação e configuração de diretórios concluído!"
+
+chown root:GRP_ADM /adm
+chown root:GRP_VEN /ven
+chown root:GRP_SEC /sec
+
+echo "Processo de permissões do root efetuadas com sucesso!"
+
+echo "Finalizando script...."
