@@ -41,7 +41,7 @@ echo "Processo de criação de usuários concluído!"
 for dir in "${diretorios[@]}"; do
   if [ ! -d "$dir" ]; then
     echo "Criando diretório: $dir"
-    sudo mkdir "$dir"
+    mkdir "$dir"
     
     if [ "$dir" = "/publico" ]; then
       chmod 777 "$dir"
